@@ -1,7 +1,8 @@
-package com.pedryc.thedrunked.auth;
+package com.labuz.musicapp.auth;
 
-import com.pedryc.thedrunked.entities.UserEntity;
-import com.pedryc.thedrunked.repositories.UserRepository;
+
+import com.labuz.musicapp.entities.UserEntity;
+import com.labuz.musicapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

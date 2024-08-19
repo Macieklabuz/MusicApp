@@ -1,4 +1,4 @@
-package com.pedryc.thedrunked.auth;
+package com.labuz.musicapp.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

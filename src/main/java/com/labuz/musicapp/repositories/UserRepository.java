@@ -1,7 +1,7 @@
-package com.pedryc.thedrunked.repositories;
+package com.labuz.musicapp.repositories;
 
 
-import com.pedryc.thedrunked.entities.UserEntity;
+import com.labuz.musicapp.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

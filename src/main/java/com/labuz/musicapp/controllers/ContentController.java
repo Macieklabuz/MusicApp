@@ -1,9 +1,9 @@
-package com.pedryc.thedrunked.controllers;
+package com.labuz.musicapp.controllers;
 
 
-import com.pedryc.thedrunked.auth.UserDetailService;
-import com.pedryc.thedrunked.auth.JwtService;
-import com.pedryc.thedrunked.auth.LoginForm;
+
+import com.labuz.musicapp.auth.JwtService;
+import com.labuz.musicapp.auth.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,15 +39,4 @@ public class ContentController {
     return "Welcome to USER home!";
   }
 
-//  @PostMapping("/authenticate")
-//  public String authenticateAndGetToken(@RequestBody LoginForm loginForm) {
-//    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//            loginForm.username(), loginForm.password()
-//    ));
-//    if (authentication.isAuthenticated()) {
-//      return jwtService.generateToken(myUserDetailService.loadUserByUsername(loginForm.username()));
-//    } else {
-//      throw new UsernameNotFoundException("Invalid credentials");
-//    }
-//  }
 }
