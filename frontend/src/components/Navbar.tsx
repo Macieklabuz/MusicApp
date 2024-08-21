@@ -118,9 +118,3 @@ const Menu = styled.div`
   }
 `;
 
-const MenuSpan = styled.span`
-  height: 0.4rem;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 0.2rem;
-`;

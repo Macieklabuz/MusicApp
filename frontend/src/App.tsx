@@ -5,6 +5,7 @@ import Home from "./pages/Home.tsx"
 import NotFound from "./pages/NotFound.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import {Navbar} from "./components/Navbar.tsx";
+import GlobalContainer from "./components/GlobalContainer.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -21,7 +22,7 @@ const AppContent = () => {
     const isAuthPath = location.pathname.startsWith('/auth');
 
     return (
-        <>
+        <GlobalContainer>
             {!isAuthPath && <Navbar />}
             <Routes>
                 <Route
@@ -37,7 +38,7 @@ const AppContent = () => {
                 <Route path="/auth/register" element={<RegisterAndLogout/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
-        </>
+        </GlobalContainer>
     );
 };
 
