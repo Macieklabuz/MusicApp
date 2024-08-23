@@ -1,6 +1,11 @@
 import styled from 'styled-components';
+import {ReactNode} from "react";
 
-export default function GlobalContainer({ children }) {
+interface MainContentProps {
+    children: ReactNode;
+}
+
+export default function GlobalContainer({ children }: MainContentProps) {
     return (
         <Wrapper>
             {children}

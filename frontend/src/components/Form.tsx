@@ -7,6 +7,7 @@ interface FormProps {
     route: string;
     method: string;
 }
+
 interface TokenData {
     token: string;
 }
@@ -14,6 +15,7 @@ interface TokenData {
 function Form(props: FormProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("")
     const navigate = useNavigate();
 
     const name = props.method === "login" ? "Login" : "Register";
@@ -24,12 +26,11 @@ function Form(props: FormProps) {
         try {
             const res = await api.post<TokenData>(props.route, {username, password})
             if (props.method === "login" && res.data.token) {
-
                 localStorage.setItem("token", res.data.token)
                 navigate("/")
             }
             else {
-                navigate("/login")
+                setErrorMessage("Wrong email or password")
             }
         } catch (error) {
             alert(error)
@@ -39,6 +40,7 @@ function Form(props: FormProps) {
     return (
         <FormContainer onSubmit={handleSubmit} className="form-container">
             <h1>{name}</h1>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
             <FormInput
                 className="form-input"
                 type="text"
@@ -94,7 +96,12 @@ const FormButton = styled.button`
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
 
-    .form-button:hover {
+    button:hover {
         background-color: #0056b3;
     }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 1rem; 
 `;

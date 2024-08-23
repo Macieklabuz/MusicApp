@@ -9,7 +9,7 @@ import GlobalContainer from "./components/GlobalContainer.tsx";
 
 function Logout() {
     localStorage.clear();
-    return <Navigate to="/login" />;
+    return <Navigate to="/auth/login" />;
 }
 
 function RegisterAndLogout() {
