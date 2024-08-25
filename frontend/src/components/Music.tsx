@@ -7,7 +7,7 @@ interface ArtistData {
 }
 
 interface MusicProps{
-    key: string;
+    key: number;
     file: string;
     name: string;
     artists: ArtistData[];

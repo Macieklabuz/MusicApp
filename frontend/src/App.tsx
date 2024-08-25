@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import {Navbar} from "./components/Navbar.tsx";
 import GlobalContainer from "./components/GlobalContainer.tsx";
+import MusicPage from "./pages/MusicPage.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -30,6 +31,14 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute>
                             <Home/>
+                        </ProtectedRoute>
+                    }/>
+
+                <Route
+                    path="/music"
+                    element={
+                        <ProtectedRoute>
+                            <MusicPage/>
                         </ProtectedRoute>
                     }/>
 

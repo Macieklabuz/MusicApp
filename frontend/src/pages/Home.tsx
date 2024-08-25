@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import {Button} from "../components/Button.tsx";
 import MainContent from "../components/MainContent.tsx";
-import styled from "styled-components";
 import api from "../utils/api.ts";
 import {useEffect, useState} from "react";
 import {Music} from "../components/Music.tsx"
+import {Column, Columns} from "../styled-components/Common.tsx";
 
 
 function Home() {
@@ -67,22 +67,3 @@ function Home() {
 }
 
 export default Home;
-
-const Columns = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-
-`
-const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-    gap: 50px;
-    width: 30vw;
-
-    background-color: rgba(0,0,0,0.2);
-    padding: 50px;
-    border-radius: 20px;
-`
