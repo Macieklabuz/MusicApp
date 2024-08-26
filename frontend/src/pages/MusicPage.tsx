@@ -15,6 +15,7 @@ function MusicPage(){
         genres: GenreProps[];
         instruments: InstrumentProps[];
         artists: ArtistsProps[];
+        album: AlbumProps;
     }
     interface GenreProps{
         id: number;
@@ -29,6 +30,11 @@ function MusicPage(){
         id: number;
         name: string;
     }
+    interface AlbumProps{
+        id: number;
+        name: string;
+        image: string;
+    }
     const [music, setMusic] = useState<MusicProps[]>([]);
     const [filteredMusic, setFilteredMusic] = useState<MusicProps[]>([]);
     const [error, setError] = useState<string | null> (null)
@@ -38,7 +44,10 @@ function MusicPage(){
                 music.name.toLowerCase().includes(inputValue.toLowerCase()) ||
                 music.genres.some((genre) =>
                     genre.name.toLowerCase().includes(inputValue.toLowerCase())
+
                 )
+                ||
+                        music.album.name.toLowerCase().includes(inputValue.toLowerCase())
             );
             setFilteredMusic(filtered);
         }
@@ -68,12 +77,12 @@ function MusicPage(){
             <Columns>
                 <Column>
                     <SearchBar onSearch={filterMusic}/>
-                </Column>
-                <Column>
                     {error}
                     {Array.isArray(filteredMusic) && filteredMusic.map(filteredMusic => (
                         <Music key={filteredMusic.id} {...filteredMusic} />
-                ))}
+                    ))}
+                </Column>
+                <Column>
                 </Column>
             </Columns>
         </MainContent>

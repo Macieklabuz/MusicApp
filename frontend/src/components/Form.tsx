@@ -29,6 +29,9 @@ function Form(props: FormProps) {
                 localStorage.setItem("token", res.data.token)
                 navigate("/")
             }
+            else if(props.method ==="register"){
+                navigate("/")
+            }
             else {
                 setErrorMessage("Wrong email or password")
             }
