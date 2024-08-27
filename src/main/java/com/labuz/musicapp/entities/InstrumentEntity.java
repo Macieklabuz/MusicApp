@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "instruments")
@@ -23,10 +24,9 @@ public class InstrumentEntity {
     @Column(name = "instrument_type")
     private String instrumentType;
 
-    @Column(name = "intrument_description")
-    private String intrumentDescription;
+    @Column(name = "instrument_description")
+    private String instrumentDescription;
 
     @ManyToMany(mappedBy = "instruments")
-    @JsonIgnore
-    private Set<MusicEntity> music;
+    private List<MusicEntity> music;
 }

@@ -1,6 +1,7 @@
 package com.labuz.musicapp.controllers;
 
 
+import com.labuz.musicapp.dtos.MusicDto;
 import com.labuz.musicapp.entities.MusicEntity;
 import com.labuz.musicapp.services.MusicService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,8 @@ public class MusicController {
     }
 
     @GetMapping("/user/music")
-    public List<MusicEntity> music(){
+    public List<MusicDto> music(){
         return musicService.getAllMusic();
     }
+
 }

@@ -1,2 +1,21 @@
-package com.labuz.musicapp.dtos;public class InstrumentDto {
+package com.labuz.musicapp.dtos;
+
+import com.labuz.musicapp.entities.InstrumentEntity;
+
+import lombok.Getter;
+
+@Getter
+public class InstrumentDto {
+
+    private final int id;
+    private final String name;
+    private final String type;
+    private final String description;
+
+    public InstrumentDto(InstrumentEntity instrument) {
+        this.id = instrument.getInstrumentId();
+        this.name = instrument.getInstrumentName();
+        this.type = instrument.getInstrumentType();
+        this.description = instrument.getInstrumentDescription();
+    }
 }

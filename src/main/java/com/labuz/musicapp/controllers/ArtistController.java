@@ -1,5 +1,6 @@
 package com.labuz.musicapp.controllers;
 
+import com.labuz.musicapp.dtos.ArtistDto;
 import com.labuz.musicapp.entities.ArtistEntity;
 
 import com.labuz.musicapp.services.ArtistService;
@@ -17,7 +18,7 @@ public class ArtistController {
     }
 
     @GetMapping("/user/artist")
-    public List<ArtistEntity> artist(){
+    public List<ArtistDto> artist(){
         return artistService.getAllArtists();
     }
 }

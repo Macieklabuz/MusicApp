@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "genres")
@@ -22,11 +24,10 @@ public class GenreEntity {
     private String genreName;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
     @JoinTable(
             name = "genre_music",
             joinColumns = { @JoinColumn(name = "genre_id")},
             inverseJoinColumns = {@JoinColumn(name = "music_id")}
     )
-    Set<MusicEntity> music = new HashSet<>();
+    List<MusicEntity> music = new ArrayList<>();
 }

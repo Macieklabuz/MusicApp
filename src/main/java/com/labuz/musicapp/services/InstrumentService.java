@@ -1,6 +1,9 @@
 package com.labuz.musicapp.services;
 
+import com.labuz.musicapp.dtos.InstrumentDto;
+import com.labuz.musicapp.dtos.MusicDto;
 import com.labuz.musicapp.entities.InstrumentEntity;
+import com.labuz.musicapp.entities.MusicEntity;
 import com.labuz.musicapp.repositories.InstrumentRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,8 @@ public class InstrumentService {
         this.instrumentRepository = instrumentRepository;
     }
 
-    public List<InstrumentEntity> getAllInstruments() {
-        return instrumentRepository.findAll();
+    public List<InstrumentDto> getAllInstruments() {
+        List<InstrumentEntity> instrumentEntities = instrumentRepository.findAll();
+        return instrumentEntities.stream().map(InstrumentDto::new).toList();
     }
 }

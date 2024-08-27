@@ -1,5 +1,6 @@
 package com.labuz.musicapp.controllers;
 
+import com.labuz.musicapp.dtos.GenreDto;
 import com.labuz.musicapp.entities.GenreEntity;
 import com.labuz.musicapp.entities.InstrumentEntity;
 import com.labuz.musicapp.services.GenreService;
@@ -18,7 +19,7 @@ public class GenreController {
     }
 
     @GetMapping("/user/genre")
-    public List<GenreEntity> genre(){
+    public List<GenreDto> genre(){
         return genreService.getAllGenres();
     }
 }

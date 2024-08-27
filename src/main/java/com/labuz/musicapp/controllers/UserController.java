@@ -1,5 +1,6 @@
 package com.labuz.musicapp.controllers;
 
+import com.labuz.musicapp.dtos.UserDto;
 import com.labuz.musicapp.entities.UserEntity;
 import com.labuz.musicapp.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public List<UserEntity> user(){
+    public List<UserDto> user(){
         return userService.getAllUsers();
     }
 

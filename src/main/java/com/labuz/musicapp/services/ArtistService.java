@@ -1,6 +1,9 @@
 package com.labuz.musicapp.services;
 
+import com.labuz.musicapp.dtos.ArtistDto;
+import com.labuz.musicapp.dtos.MusicDto;
 import com.labuz.musicapp.entities.ArtistEntity;
+import com.labuz.musicapp.entities.MusicEntity;
 import com.labuz.musicapp.repositories.ArtistRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,8 @@ public class ArtistService {
         this.artistRepository = artistRepository;
     }
 
-    public List<ArtistEntity> getAllArtists() {
-        return artistRepository.findAll();
+    public List<ArtistDto> getAllArtists() {
+        List<ArtistEntity> artistEntities = artistRepository.findAll();
+        return artistEntities.stream().map(ArtistDto::new).toList();
     }
 }

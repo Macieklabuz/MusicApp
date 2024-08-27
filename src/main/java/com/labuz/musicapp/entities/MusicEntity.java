@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,7 +32,7 @@ public class MusicEntity {
     private String file;
 
     @ManyToMany(mappedBy = "music")
-    private Set<UserEntity> users;
+    private List<UserEntity> users;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -38,12 +40,23 @@ public class MusicEntity {
             joinColumns = { @JoinColumn(name = "music_id")},
             inverseJoinColumns = {@JoinColumn(name = "instrument_id")}
     )
-    Set<InstrumentEntity> instruments = new HashSet<>();
+    List<InstrumentEntity> instruments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "music")
-    private Set<GenreEntity> genres;
+    private List<GenreEntity> genres;
 
 
     @ManyToMany(mappedBy = "music")
-    private Set<ArtistEntity> artists;
+    private List<ArtistEntity> artists;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "album_id")
+    private AlbumEntity album;
+
+    @OneToMany(mappedBy = "music", orphanRemoval = true)
+    private List<LikeEntity> likes = new ArrayList<>();
+
+    public int countLikes(){
+        return likes.size();
+    }
 }
