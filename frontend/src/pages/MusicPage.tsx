@@ -79,7 +79,7 @@ function MusicPage(){
                     <SearchBar onSearch={filterMusic}/>
                     {error}
                     {Array.isArray(filteredMusic) && filteredMusic.map(filteredMusic => (
-                        <Music key={filteredMusic.id} {...filteredMusic} />
+                        <Music key={filteredMusic.id} onClick = {() => console.log("siema")} {...filteredMusic} />
                     ))}
                 </Column>
                 <Column>
