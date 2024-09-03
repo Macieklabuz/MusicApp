@@ -37,7 +37,11 @@ public class MusicDto {
         List<ArtistEntity> artists = music.getArtists();
         this.artists = artists.stream().map(ArtistDto::new).toList();
         AlbumEntity album = music.getAlbum();
-        this.album = new AlbumDto(album);
+        if(album != null) {
+            this.album = new AlbumDto(album);
+        }else{
+            this.album = null;
+        }
     }
 
 }

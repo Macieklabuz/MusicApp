@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../utils/api.ts";
 import styled from "styled-components";
+import Album from "./Album.tsx";
 
 interface ArtistData {
     id: number;
@@ -18,32 +19,15 @@ interface MusicProps {
     file: string; // nazwa pliku muzycznego na serwerze
     name: string;
     artists: ArtistData[];
-    album: AlbumData;
-
+    album: AlbumData | null;
     onClick: any;
 }
 
 export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClick }) => {
-    const [imageData, setImageData] = useState<string>("");
     const [audioData, setAudioData] = useState<string>("");
 
     useEffect(() => {
-        // Pobieranie obrazu albumu
-        async function getImage(image: string) {
-            try {
-                const res = await api.get<Blob>(`/user/file/${image}`, {
-                    responseType: "blob",
-                });
-                if (res.data) {
-                    const blob = URL.createObjectURL(res.data);
-                    setImageData(blob);
-                } else {
-                    console.log("Unable to load album image");
-                }
-            } catch (error) {
-                console.error("Error fetching album image", error);
-            }
-        }
+
 
         // Pobieranie pliku audio
         async function getAudio(file: string) {
@@ -62,38 +46,50 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
             }
         }
 
-        getImage(album.image);
-        getAudio(file);
-    }, [album.image, file]);
+       void getAudio(file);
+    }, []);
 
     return (
-        <div onClick={onClick}>
-            <div>{name}</div>
-            <div>
+        <MusicContainer onClick={onClick}>
+            <MusicName>{name}</MusicName>
+            <ArtistDiv>
                 {artists.map((artist) => (
                     <div key={artist.id}>
                         <span>{artist.name}</span>
                     </div>
                 ))}
-            </div>
-            <div>
-                <div key={album.id}>
-                    <span>{album.name}</span>
-                    <Image src={imageData}  />
-                </div>
-            </div>
+            </ArtistDiv>
+            {album && <Album {...album}/>}
             {audioData && (
                 <audio controls>
                     <source src={audioData} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>
             )}
-        </div>
+        </MusicContainer>
     );
 };
 
-const Image = styled.img`
-    object-fit: cover;
-    width: 100px;
+const MusicContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
-`;
+    gap: 10px;
+
+    background-color: lightgray;
+    padding: 10px;
+`
+
+const ArtistDiv = styled.div`
+    justify-items: center;
+    background-color: gray;
+    border-radius: 10px;
+
+    margin: 10px;
+    padding: 10px;
+`
+
+const MusicName = styled.div`
+    font-size: 32px;
+    margin-bottom: 10px;
+`

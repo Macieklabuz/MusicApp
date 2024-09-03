@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {SearchBar} from "../components/SearchBar.tsx";
 import api from "../utils/api.ts";
 import {Music} from "../components/Music.tsx";
+import {DetailedMusic} from "../components/DetailedMusic.tsx";
 
 function MusicPage(){
 
@@ -38,6 +39,7 @@ function MusicPage(){
     const [music, setMusic] = useState<MusicProps[]>([]);
     const [filteredMusic, setFilteredMusic] = useState<MusicProps[]>([]);
     const [error, setError] = useState<string | null> (null)
+    const [clickedMusic, setClickedMusic] = useState<MusicProps>();
     function filterMusic(inputValue: string){
         if (Array.isArray(music)){
             const filtered = music.filter((music) =>
@@ -78,11 +80,12 @@ function MusicPage(){
                 <Column>
                     <SearchBar onSearch={filterMusic}/>
                     {error}
-                    {Array.isArray(filteredMusic) && filteredMusic.map(filteredMusic => (
-                        <Music key={filteredMusic.id} onClick = {() => console.log("siema")} {...filteredMusic} />
+                    {Array.isArray(filteredMusic) && filteredMusic.map(filteredMusicCurrent => (
+                        <Music key={filteredMusicCurrent.id} onClick = {() => setClickedMusic(filteredMusicCurrent)} {...filteredMusicCurrent} />
                     ))}
                 </Column>
                 <Column>
+                    {clickedMusic && <DetailedMusic {...clickedMusic}/>}
                 </Column>
             </Columns>
         </MainContent>

@@ -15,7 +15,7 @@ function Home() {
     }
 
     interface MusicData{
-        id: string;
+        id: number;
         file: string;
         name: string;
         artists: ArtistData[];

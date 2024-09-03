@@ -2,12 +2,14 @@ package com.labuz.musicapp.dtos;
 
 import com.labuz.musicapp.entities.InstrumentEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class InstrumentDto {
 
-    private final int id;
+    private final long id;
     private final String name;
     private final String type;
     private final String description;

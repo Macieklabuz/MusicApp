@@ -7,20 +7,26 @@ export const Navbar = () => {
         <NavContainer>
             <Nav>
                 <NavTitle href="/">
-                    Website
+                    MusicApp
                 </NavTitle>
                 <Menu className="menu" onClick={() => setMenuOpen(!menuOpen)}>
 
                 </Menu>
                 <NavList className={menuOpen ? "open" : ""}>
                     <NavListItem>
-                        <NavLink href="/about">About</NavLink>
+                        <NavLink href="/music">Music</NavLink>
                     </NavListItem>
                     <NavListItem>
-                        <NavLink href="/services">Services</NavLink>
+                        <NavLink href="/artists">Artists</NavLink>
                     </NavListItem>
                     <NavListItem>
-                        <NavLink href="/contact">Contact</NavLink>
+                        <NavLink href="/albums">Albums</NavLink>
+                    </NavListItem>
+                    <NavListItem>
+                        <NavLink href="/genres">Genres</NavLink>
+                    </NavListItem>
+                    <NavListItem>
+                        <NavLink href="/instruments">Instruments</NavLink>
                     </NavListItem>
                 </NavList>
             </Nav>

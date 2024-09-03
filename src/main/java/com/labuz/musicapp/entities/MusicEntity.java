@@ -50,7 +50,7 @@ public class MusicEntity {
     private List<ArtistEntity> artists;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "album_id")
+    @JoinColumn(name = "album_id", nullable = true)
     private AlbumEntity album;
 
     @OneToMany(mappedBy = "music", orphanRemoval = true)
