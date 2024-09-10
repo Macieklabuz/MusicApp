@@ -11,6 +11,7 @@ interface Props {
     oldFile: string;
     oldGenres: GenreProps[];
     oldInstruments: InstrumentProps[];
+    handleEditMode: ()=>void;
 }
 
 interface InstrumentProps {
@@ -29,7 +30,8 @@ const EditMusic: React.FC<Props> = ({
                                         oldDescription,
                                         oldFile,
                                         oldGenres,
-                                        oldInstruments,}: Props) => {
+                                        oldInstruments,
+                                        handleEditMode}: Props) => {
     const [id] = useState<number>(oldId); // Dodanie ID do stanu
     const [name, setName] = useState<string>(oldName);
     const [file, setFile] = useState<string>(oldFile);
@@ -144,7 +146,7 @@ const EditMusic: React.FC<Props> = ({
     return (
         <ModalOverlay>
             <ModalContent>
-                <ExitIcon />
+                <ExitIcon onClick={handleEditMode}/>
                 <Form onSubmit={handleSubmit}>
                     <Input
                         value={name}

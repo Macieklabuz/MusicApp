@@ -12,9 +12,11 @@ export const Column = styled.div`
 
     align-items: center;
     gap: 50px;
-    width: 30vw;
+    width: 35vw;
+    height: 80vh;
 
     background-color: rgba(0,0,0,0.2);
     padding: 50px;
     border-radius: 20px;
+    overflow: auto;
 `

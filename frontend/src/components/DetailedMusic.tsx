@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import getImage from "../utils/Imageutils.tsx";
+import {AiFillCloseCircle} from "react-icons/ai";
 
 interface ArtistData {
     id: number;
@@ -17,10 +18,13 @@ interface MusicProps {
     key?: number;
     description: string;
     name: string;
+    likes: number;
     artists: ArtistData[];
     album: AlbumData | null;
     instruments: InstrumentProps[];
     genres: GenreProps[];
+    handleLike: () => void;
+    handleEditMode: () => void;
 }
 interface InstrumentProps{
     id: number;
@@ -31,7 +35,7 @@ interface GenreProps{
     name: string;
 }
 
-export const DetailedMusic: React.FC<MusicProps> = ({ name, artists, album, description, instruments, genres }) => {
+export const DetailedMusic: React.FC<MusicProps> = ({ name, artists, album, description, instruments, genres, likes, handleLike, handleEditMode }) => {
     const [imageData, setImageData] = useState<string>("");
 
     useEffect(() => {
@@ -42,6 +46,7 @@ export const DetailedMusic: React.FC<MusicProps> = ({ name, artists, album, desc
 
     return (
         <MusicContainer>
+            <ExitIcon onClick = {handleEditMode} />
             <MusicName>{name}</MusicName>
             <div>{description}</div>
             <ArtistDiv>
@@ -71,6 +76,9 @@ export const DetailedMusic: React.FC<MusicProps> = ({ name, artists, album, desc
                     </div>
                 ))}
             </ArtistDiv>
+            <div onClick={handleLike}>
+                {likes}
+            </div>
         </MusicContainer>
     );
 };
@@ -82,6 +90,7 @@ const Image = styled.img`
 `;
 
 const MusicContainer = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -113,3 +122,8 @@ const MusicName = styled.div`
     font-size: 32px;
     margin-bottom: 10px;
 `
+const ExitIcon = styled(AiFillCloseCircle)`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+`;

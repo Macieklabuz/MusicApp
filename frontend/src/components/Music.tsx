@@ -18,12 +18,13 @@ interface MusicProps {
     key: number;
     file: string; // nazwa pliku muzycznego na serwerze
     name: string;
+    likes: number;
     artists: ArtistData[];
     album: AlbumData | null;
     onClick: any;
 }
 
-export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClick }) => {
+export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClick, likes }) => {
     const [audioData, setAudioData] = useState<string>("");
 
     useEffect(() => {
@@ -61,6 +62,7 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
                 ))}
             </ArtistDiv>
             {album && <Album {...album}/>}
+            {likes}
             {audioData && (
                 <audio controls>
                     <source src={audioData} type="audio/mpeg" />
