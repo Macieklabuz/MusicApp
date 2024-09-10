@@ -32,7 +32,8 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
         // Pobieranie pliku audio
         async function getAudio(file: string) {
             try {
-                const res = await api.get<Blob>(`/user/audio/file/${file}`, {
+                const res = await api.get<Blob>(`/user/audio/file`, {
+                    params:{fileName:file},
                     responseType: "blob",
                 });
                 if (res.data) {

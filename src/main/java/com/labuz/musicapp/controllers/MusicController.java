@@ -6,10 +6,7 @@ import com.labuz.musicapp.dtos.MusicFormDto;
 import com.labuz.musicapp.entities.MusicEntity;
 import com.labuz.musicapp.services.MusicService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,4 +32,14 @@ public class MusicController {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
     }
+    @PutMapping("/user/updatemusic")
+    public ResponseEntity<?> updateMusic(@RequestBody MusicFormDto musicDto){
+        try{
+            musicService.updateMusic(musicDto);
+            return ResponseEntity.ok().body("Music updated successfully");
+        }catch(Exception error){
+            return ResponseEntity.badRequest().body(error.getMessage());
+        }
+    }
+
 }

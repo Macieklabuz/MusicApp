@@ -80,4 +80,32 @@ public class MusicService {
         musicEntity.setInstruments(instrumentEntities);
         musicRepository.save(musicEntity);
     }
+    public void updateMusic(MusicFormDto musicDto) {
+
+        MusicEntity musicEntity = musicRepository.findById(musicDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Music not found"));
+
+        UserEntity user = getCurrentUser(); // upewnij się, że użytkownik jest zalogowany
+
+        List<InstrumentEntity> instrumentEntities = musicDto.getInstruments().stream().map(instrumentDto -> {
+            InstrumentEntity instrumentEntity = instrumentRepository.findById(instrumentDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Instrument not found"));
+            return instrumentEntity;
+        }).toList();
+
+        List<GenreEntity> genreEntities= musicDto.getGenres().stream().map(genreDto -> {
+            GenreEntity genreEntity = genreRepository.findById(genreDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Genre not found"));
+            return genreEntity;
+        }).toList();
+
+        musicEntity.setName(musicDto.getName());
+        musicEntity.setDescription(musicDto.getDescription());
+        musicEntity.setFile(musicDto.getFile());
+        musicEntity.getGenres().clear();
+        musicEntity.getGenres().addAll(genreEntities);
+        musicEntity.getInstruments().clear();
+        musicEntity.getInstruments().addAll(instrumentEntities);
+        musicRepository.save(musicEntity);
+    }
 }

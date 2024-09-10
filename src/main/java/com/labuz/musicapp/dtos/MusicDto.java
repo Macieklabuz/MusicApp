@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class MusicDto {
 
-    private final int id;
+    private final long id;
     private final String name;
     private final String file;
     private final String description;

@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class MusicFormDto {
 
-    private final int id;
+    private final long id;
     private final String name;
     private final String file;
     private final String description;

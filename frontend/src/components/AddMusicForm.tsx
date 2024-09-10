@@ -94,7 +94,7 @@ export const AddMusicForm = () => {
             const musicData = {
                 id: 0,
                 name: name,
-                file: fileName,
+                file: res.data,
                 description: description,
                 instruments: selectedInstruments,
                 genres: selectedGenres
@@ -139,17 +139,6 @@ export const AddMusicForm = () => {
             />
 
             <button type="submit" > Zatwierdz </button>
-
-            {/*
-            <input 
-                value={newIngredients} 
-                onChange={(event) => setNewIngredients(event.target.value)}
-            />
-
-            <input 
-                value={newTags} 
-                onChange={(event) => setNewTags(event.target.value)}
-            /> */}
 
         </form>
     );

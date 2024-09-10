@@ -3,8 +3,14 @@ package com.labuz.musicapp.controllers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,34 +22,37 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/user/audio")
 public class AudioController {
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     // Metoda GET do pobierania pliku
-    @GetMapping("/file/{fileName}")
-    public ResponseEntity<byte[]> getAudioFile(@PathVariable String fileName) {
+    @GetMapping("/file")
+    public ResponseEntity<byte[]> getAudioFile(@RequestParam String fileName) {
         // Walidacja nazwy pliku
         if (!fileName.matches("[a-zA-Z0-9_-]+\\.(mp3)")) {
+            System.out.println("siema");
             return ResponseEntity.badRequest().body("Invalid file name".getBytes());
         }
 
         try {
-            // Wczytanie pliku MP3 z folderu mp3 w zasobach
-            ClassPathResource audioFile = new ClassPathResource("mp3/" + fileName);
 
-            // Sprawdzenie, czy plik istnieje
-            if (!audioFile.exists()) {
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
+
+            System.out.println(filePath);
+
+            if (!Files.exists(filePath)) {
                 return ResponseEntity.notFound().build();
             }
 
-            // Odczytanie pliku do tablicy bajtów
-            byte[] audioBytes = StreamUtils.copyToByteArray(audioFile.getInputStream());
+            byte[] imageBytes = Files.readAllBytes(filePath);
 
-            // Zwrócenie odpowiedzi z zawartością pliku MP3
+            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+
             return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(audioBytes);
+                    .contentType(mediaType)
+                    .body(imageBytes);
 
-        } catch (IOException error) {
-            // Obsługa błędów IO
+        } catch(IOException error) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while reading the file".getBytes());
         }
@@ -51,39 +60,34 @@ public class AudioController {
 
     // Metoda POST do uploadu pliku
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadAudioFile(@RequestParam("file") MultipartFile file) {
-        // Sprawdzenie, czy plik jest pusty
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("No file selected to upload.");
-        }
-
-        String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-
-        // Walidacja formatu pliku
-        if (!uniqueFileName.matches("[a-zA-Z0-9_-]+\\.(mp3)")) {
-            return ResponseEntity.badRequest().body("Invalid file name. Only .mp3 files are allowed.");
+            return ResponseEntity.badRequest().body("Please select a file to upload.");
         }
 
         try {
-            // Określenie ścieżki, gdzie plik zostanie zapisany
-            File uploadDir = new File("src/main/resources/mp3/");
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
+            String originalFileName = file.getOriginalFilename();
+            if (originalFileName == null) {
+                return ResponseEntity.badRequest().body("Invalid file name.");
             }
 
-            // Zapisanie pliku na serwerze
-            File uploadedFile = new File(uploadDir, uniqueFileName);
-            try (FileOutputStream fos = new FileOutputStream(uploadedFile)) {
-                fos.write(file.getBytes());
-            }
 
-            // Zwrócenie odpowiedzi, że upload się powiódł
-            return ResponseEntity.ok("File uploaded successfully.");
+            String sanitizedFileName = originalFileName.replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9._-]", "");
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + sanitizedFileName;
 
-        } catch (IOException error) {
-            // Obsługa błędów IO
+
+            Path uploadPath = Paths.get(uploadDir).resolve(uniqueFileName);
+            Files.createDirectories(uploadPath.getParent());
+
+
+            Files.write(uploadPath, file.getBytes());
+
+            return ResponseEntity.ok(uniqueFileName);
+
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while uploading the file.");
+                    .body("An error occurred while uploading the file: " + e.getMessage());
         }
     }
+
 }

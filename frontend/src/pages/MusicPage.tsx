@@ -5,6 +5,7 @@ import {SearchBar} from "../components/SearchBar.tsx";
 import api from "../utils/api.ts";
 import {Music} from "../components/Music.tsx";
 import {DetailedMusic} from "../components/DetailedMusic.tsx";
+import EditMusic from "../components/EditMusic.tsx";
 
 function MusicPage(){
 
@@ -88,6 +89,7 @@ function MusicPage(){
                     {clickedMusic && <DetailedMusic {...clickedMusic}/>}
                 </Column>
             </Columns>
+            {clickedMusic && <EditMusic oldId={clickedMusic.id} oldName = {clickedMusic.name} oldFile = {clickedMusic.file} oldDescription={clickedMusic.description} oldGenres={clickedMusic.genres} oldInstruments={clickedMusic.instruments} />}
         </MainContent>
     )
 }
