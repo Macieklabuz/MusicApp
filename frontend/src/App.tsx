@@ -8,6 +8,7 @@ import {Navbar} from "./components/Navbar.tsx";
 import GlobalContainer from "./components/GlobalContainer.tsx";
 import MusicPage from "./pages/MusicPage.tsx";
 import AddMusicPage from "./pages/AddMusicPage.tsx";
+import AlbumPage from "./pages/AlbumPage.tsx";
 
 function Logout() {
     localStorage.clear();
@@ -48,6 +49,13 @@ const AppContent = () => {
                     element={
                         <ProtectedRoute>
                             <AddMusicPage/>
+                        </ProtectedRoute>
+                    }/>
+                <Route
+                    path="/albums"
+                    element={
+                        <ProtectedRoute>
+                            <AlbumPage/>
                         </ProtectedRoute>
                     }/>
 

@@ -7,23 +7,22 @@ interface AlbumProps {
     key?: number;
     image: string;
     name: string;
-    artist?: string;
 }
 
-const Album: React.FC<AlbumProps> = ({name, id, image, artist }) =>{
+
+const DetailedAlbum: React.FC<AlbumProps> = ({name, id, image }) =>{
     const [imageData, setImageData] = useState<string>("");
     useEffect(() => {
-       void getImage(image, setImageData);
+        void getImage(image, setImageData);
     },[])
     return(
         <AlbumDiv key={id}>
             <span>{name}</span>
             <Image src={imageData} alt="Album image"/>
-            {artist && <div>{artist}</div>}
         </AlbumDiv>
     )
 }
-export default Album
+export default DetailedAlbum
 
 const AlbumDiv = styled.div`
     background-color: gray;
