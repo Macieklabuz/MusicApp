@@ -2,9 +2,8 @@ import {useEffect, useState} from "react";
 import api from "../utils/api.ts";
 import MainContent from "../components/MainContent.tsx";
 import {Column, Columns} from "../styled-components/Common.tsx";
-import {Music} from "../components/Music.tsx";
-import DetailedAlbum from "../components/DetailedAlbum.tsx";
 import Album from "../components/Album.tsx";
+import {MusicForAlbum} from "../components/MusicForAlbum.tsx";
 
 function AlbumPage() {
 
@@ -13,15 +12,6 @@ function AlbumPage() {
         name: string;
         file: string;
         likes: number;
-        genres: GenreProps[];
-        artists: ArtistsProps[];
-        album: AlbumProps;
-        handleLike: () => void;
-    }
-
-    interface GenreProps {
-        id: number;
-        name: string;
     }
 
     interface ArtistsProps {
@@ -33,68 +23,22 @@ function AlbumPage() {
         id: number;
         name: string;
         image: string;
+        artists: ArtistsProps[];
+        music: MusicProps[];
     }
 
     const [music, setMusic] = useState<MusicProps[]>([]);
+    const [album, setAlbum] = useState<AlbumProps[]>([]);
     const [error, setError] = useState<string | null> (null)
-    const [clickedMusic, setClickedMusic] = useState<MusicProps | null>();
-    const [editMode, setEditMode] = useState<boolean>(false);
-    const [likedMusic, setLikedMusic] = useState<number[]>([])
-    const [searchValue, setSearchValue] = useState<string>("");
+    const [clickedMusic, setClickedMusic] = useState<MusicProps[] | null>();
 
-    async function handleLike(musicId: number) {
-        try {
-            const isLiked = likedMusic.some(id => (id === musicId));
-            const url = isLiked ? "user/unlike" : "user/like";
-            await api.post(url, null, {
-                params: {musicId}
-            });
-            setLikedMusic(prevLikedIds =>
-                isLiked
-                    ? prevLikedIds.filter(likedId => likedId !== musicId)
-                    : [...prevLikedIds, musicId]
-            );
-            setClickedMusic(prevMusic =>
-                prevMusic
-                    ? {...prevMusic, likes: isLiked ? prevMusic.likes - 1 : prevMusic.likes + 1}
-                    : null
-            );
-
-            setMusic(prevMusic =>
-                prevMusic.map(music =>
-                    music.id === musicId
-                        ? { ...music, likes: isLiked? music.likes - 1 : music.likes + 1}
-                        : music
-                )
-            );
-
-        } catch (error) {
-            setError("Failed to fetch data");
-            console.error(error);
-        }
-    }
     useEffect(() => {
-        async function getLikedMusic() {
+        async function getAlbum() {
             try {
-                const res = await api.get("user/likedIds");
+                const res = await api.get("user/album/artist");
                 if (res.data) {
-                    setLikedMusic(res.data)
-                } else {
-                    setError("Likes Not Found!")
-                }
-
-            } catch (error) {
-                setError("Failed to fetch data");
-                console.error(error);
-            }
-        }
-
-
-        async function getMusic() {
-            try {
-                const res = await api.get("user/music");
-                if (res.data) {
-                    setMusic(res.data)
+                    setAlbum(res.data)
+                    console.log(res.data)
                 } else {
                     setError("Music Not Found!")
                 }
@@ -104,8 +48,7 @@ function AlbumPage() {
                 console.error(error);
             }
         }
-        void getLikedMusic();
-        void getMusic();
+        void getAlbum();
     },[]);
 
     return (
@@ -113,12 +56,14 @@ function AlbumPage() {
             <Columns>
                 <Column>
                     {error}
-                    {Array.isArray(music) && music.map(musicCurrent => (
-                        <Album key={musicCurrent.album.id} {...musicCurrent.album} />
+                    {Array.isArray(album) && album.map(albumCurrent => (
+                        <Album key={albumCurrent.id} onClick={()=>setClickedMusic(albumCurrent.music)} {...albumCurrent} />
                     ))}
                 </Column>
                 <Column>
-                    {clickedMusic && <DetailedAlbum {...clickedMusic.album}/>}
+                    {clickedMusic && clickedMusic.map(musicCurrent =>(
+                        <MusicForAlbum {...musicCurrent}/>
+                    ))}
                 </Column>
             </Columns>
         </MainContent>

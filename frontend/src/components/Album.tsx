@@ -7,19 +7,27 @@ interface AlbumProps {
     key?: number;
     image: string;
     name: string;
-    artist?: string;
+    artists: ArtistsProps[];
+    onClick?: ()=>void;
 }
 
-const Album: React.FC<AlbumProps> = ({name, id, image, artist }) =>{
+interface ArtistsProps {
+    id: number;
+    name: string;
+}
+
+const Album: React.FC<AlbumProps> = ({name, id, image, artists, onClick }) =>{
     const [imageData, setImageData] = useState<string>("");
     useEffect(() => {
        void getImage(image, setImageData);
     },[])
     return(
-        <AlbumDiv key={id}>
+        <AlbumDiv key={id} onClick={onClick}>
             <span>{name}</span>
             <Image src={imageData} alt="Album image"/>
-            {artist && <div>{artist}</div>}
+            {artists && artists.map(artist =><div>
+                    {artist.name}
+                </div>)}
         </AlbumDiv>
     )
 }
