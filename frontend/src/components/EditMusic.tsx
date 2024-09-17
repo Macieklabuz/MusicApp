@@ -11,7 +11,7 @@ interface Props {
     oldFile: string;
     oldGenres: GenreProps[];
     oldInstruments: InstrumentProps[];
-    handleEditMode: ()=>void;
+    handleEditMode: () => void;
 }
 
 interface InstrumentProps {
@@ -31,13 +31,14 @@ const EditMusic: React.FC<Props> = ({
                                         oldFile,
                                         oldGenres,
                                         oldInstruments,
-                                        handleEditMode}: Props) => {
-    const [id] = useState<number>(oldId); // Dodanie ID do stanu
+                                        handleEditMode
+                                    }: Props) => {
+    const [id] = useState<number>(oldId);
     const [name, setName] = useState<string>(oldName);
     const [file, setFile] = useState<string>(oldFile);
     const [description, setDescription] = useState<string>(oldDescription);
-    const [newFileUrl, setNewFileUrl] = useState<string | null>(null); // URL dla wyświetlenia aktualnego pliku
-    const [newFile, setNewFile] = useState<File | null>(null); // Nowy plik wybrany przez użytkownika
+    const [newFileUrl, setNewFileUrl] = useState<string | null>(null);
+    const [newFile, setNewFile] = useState<File | null>(null);
     const [instruments, setInstruments] = useState<InstrumentProps[]>([]);
     const [genres, setGenres] = useState<GenreProps[]>([]);
     const [selectedInstruments, setSelectedInstruments] = useState<InstrumentProps[]>(oldInstruments);
@@ -92,17 +93,15 @@ const EditMusic: React.FC<Props> = ({
         setSelectedGenres(selectedGenres);
     };
 
-    // Obsługa zmiany pliku
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setNewFile(file);
-            setNewFileUrl(URL.createObjectURL(file)); // Ustawienie podglądu nowego pliku
+            setNewFileUrl(URL.createObjectURL(file));
             setFile(file.name);
         }
     };
 
-    // Dodana funkcja handleSubmit
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -112,32 +111,28 @@ const EditMusic: React.FC<Props> = ({
             const formData = new FormData();
             formData.append("file", newFile);
             try {
-
                 newFileName = await api.post("user/audio/upload", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-                alert("Muzyka została zaktualizowana pomyślnie!");
             } catch (error) {
                 console.error("Błąd podczas aktualizacji pliku:", error);
             }
         }
 
-
-
         try {
-        const newMusic ={
-            id: id,
-            name: name,
-            file: newFileName ? newFileName.data : file,
-            description: description,
-            instruments: selectedInstruments,
-            genres: selectedGenres
-
-        }
+            const newMusic = {
+                id: id,
+                name: name,
+                file: newFileName ? newFileName.data : file,
+                description: description,
+                instruments: selectedInstruments,
+                genres: selectedGenres
+            };
             await api.put("user/updatemusic", newMusic);
             alert("Muzyka została zaktualizowana pomyślnie!");
+            handleEditMode(); // Close modal on successful update
         } catch (error) {
             console.error("Błąd podczas aktualizacji muzyki:", error);
         }
@@ -146,7 +141,7 @@ const EditMusic: React.FC<Props> = ({
     return (
         <ModalOverlay>
             <ModalContent>
-                <ExitIcon onClick={handleEditMode}/>
+                <ExitIcon onClick={handleEditMode} />
                 <Form onSubmit={handleSubmit}>
                     <Input
                         value={name}
@@ -158,38 +153,33 @@ const EditMusic: React.FC<Props> = ({
                         onChange={(event) => setDescription(event.target.value)}
                         placeholder="Description"
                     />
-                    {/* Pole wyboru pliku dla nowego pliku audio */}
-                    <Input type="file" accept="audio/*" onChange={handleFileChange} />
-
-                    {/* Wyświetlanie aktualnego pliku audio */}
+                    <FileInput type="file" accept="audio/*" onChange={handleFileChange} />
                     {newFileUrl && (
-                        <audio controls src={newFileUrl}>
+                        <AudioPreview controls src={newFileUrl}>
                             Your browser does not support the audio element.
-                        </audio>
+                        </AudioPreview>
                     )}
                     <Select
                         options={options}
                         isMulti
                         onChange={handleInstrumentSelect}
-                        placeholder="Wybierz instrumenty..."
+                        placeholder="Select instruments..."
                         value={selectedInstruments.map((instrument) => ({
                             value: instrument.id,
                             label: instrument.name,
                         }))}
                     />
-
                     <Select
                         options={optionsGenre}
                         isMulti
                         onChange={handleGenreSelect}
-                        placeholder="Wybierz gatunek..."
+                        placeholder="Select genres..."
                         value={selectedGenres.map((genre) => ({
                             value: genre.id,
                             label: genre.name,
                         }))}
                     />
-
-                    <button type="submit"> Zatwierdz</button>
+                    <SubmitButton type="submit">Confirm</SubmitButton>
                 </Form>
             </ModalContent>
         </ModalOverlay>
@@ -198,13 +188,14 @@ const EditMusic: React.FC<Props> = ({
 
 export default EditMusic;
 
+// Styled Components
 const ModalOverlay = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -213,10 +204,10 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
     position: relative;
-    background-color: #fff;
+    background-color: #181818; /* Dark background similar to Spotify */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     width: 600px;
     z-index: 1001;
 `;
@@ -224,18 +215,49 @@ const ModalContent = styled.div`
 const Form = styled.form`
     display: flex;
     flex-direction: column;
+    gap: 10px;
 `;
 
 const Input = styled.input`
-    margin-bottom: 10px;
-    padding: 8px;
+    padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #333;
     border-radius: 4px;
+    background-color: #121212; /* Dark background for input */
+    color: #fff; /* White text */
+`;
+
+const FileInput = styled(Input)`
+    padding: 0;
+    font-size: 14px;
+`;
+
+const AudioPreview = styled.audio`
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 4px;
+`;
+
+const SubmitButton = styled.button`
+    background-color: #1db954; /* Spotify Green */
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #1ed760; /* Slightly lighter green on hover */
+    }
 `;
 
 const ExitIcon = styled(AiFillCloseCircle)`
     position: absolute;
     top: 10px;
     right: 10px;
+    color: #1db954; /* Spotify Green for close icon */
+    cursor: pointer;
+    font-size: 24px;
 `;

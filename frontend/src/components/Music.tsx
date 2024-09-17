@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import api from "../utils/api.ts";
 import styled from "styled-components";
-import Album from "./Album.tsx";
+import DetailedAlbum from "./DetailedAlbum.tsx";
+import { FaHeart } from "react-icons/fa";
 
 interface ArtistData {
     id: number;
@@ -16,7 +17,7 @@ interface AlbumData {
 
 interface MusicProps {
     key: number;
-    file: string; // nazwa pliku muzycznego na serwerze
+    file: string;
     name: string;
     likes: number;
     artists: ArtistData[];
@@ -28,13 +29,10 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
     const [audioData, setAudioData] = useState<string>("");
 
     useEffect(() => {
-
-
-        // Pobieranie pliku audio
         async function getAudio(file: string) {
             try {
                 const res = await api.get<Blob>(`/user/audio/file`, {
-                    params:{fileName:file},
+                    params: { fileName: file },
                     responseType: "blob",
                 });
                 if (res.data) {
@@ -48,51 +46,113 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
             }
         }
 
-       void getAudio(file);
-    }, []);
+        getAudio(file);
+    }, [file]);
 
     return (
         <MusicContainer onClick={onClick}>
-            <MusicName>{name}</MusicName>
-            <ArtistDiv>
-                {artists.map((artist) => (
-                    <div key={artist.id}>
-                        <span>{artist.name}</span>
-                    </div>
-                ))}
-            </ArtistDiv>
-            {album && <Album {...album}/>}
-            {likes}
-            {audioData && (
-                <audio controls>
-                    <source src={audioData} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
-            )}
+            <MusicHeader>
+                {album && <DetailedAlbum id={album.id} name={album.name} image={album.image} />}
+                <MusicInfo>
+                    <MusicName>{name}</MusicName>
+                    <ArtistDiv>
+                        {artists.map((artist) => (
+                            <ArtistName key={artist.id}>{artist.name}</ArtistName>
+                        ))}
+                    </ArtistDiv>
+                </MusicInfo>
+            </MusicHeader>
+
+            <MusicControls>
+                {audioData && (
+                    <AudioPlayer controls>
+                        <source src={audioData} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </AudioPlayer>
+                )}
+                <Likes>
+                    <FaHeart color="#1DB954" /> {likes}
+                </Likes>
+            </MusicControls>
         </MusicContainer>
     );
 };
 
+// Styled Components
+
 const MusicContainer = styled.div`
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
-    gap: 10px;
+    background-color: #181818;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-    background-color: lightgray;
-    padding: 10px;
-`
+    &:hover {
+        background-color: #282828;
+    }
+`;
+
+const MusicHeader = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+`;
+
+const MusicInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const MusicName = styled.h2`
+    font-size: 20px;
+    color: white;
+    margin-bottom: 5px;
+`;
 
 const ArtistDiv = styled.div`
-    justify-items: center;
-    background-color: gray;
-    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+`;
 
-    margin: 10px;
-    padding: 10px;
-`
+const ArtistName = styled.span`
+    font-size: 14px;
+    color: #b3b3b3;
+`;
 
-const MusicName = styled.div`
-    font-size: 32px;
-    margin-bottom: 10px;
-`
+const MusicControls = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+`;
+
+const AudioPlayer = styled.audio`
+    flex-grow: 1;
+    margin-right: 20px;
+    outline: none;
+
+    &::-webkit-media-controls-panel {
+        background-color: #1c1c1c;
+    }
+
+    &::-webkit-media-controls-play-button,
+    &::-webkit-media-controls-volume-slider {
+        color: white;
+    }
+`;
+
+const Likes = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #b3b3b3;
+    cursor: pointer;
+
+    &:hover {
+        color: #1DB954;
+    }
+`;

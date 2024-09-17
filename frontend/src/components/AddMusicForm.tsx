@@ -1,19 +1,19 @@
-import {FormEvent, useEffect, useState} from "react";
+import { FormEvent, useEffect, useState } from "react";
 import api from "../utils/api";
 import Select from "react-select";
+import styled from "styled-components";
 
-interface InstrumentProps{
+interface InstrumentProps {
     id: number;
     name: string;
 }
 
-interface GenreProps{
+interface GenreProps {
     id: number;
     name: string;
 }
 
 export const AddMusicForm = () => {
-
     const [name, setName] = useState<string>('');
     const [fileName, setFileName] = useState<string>('');
     const [file, setFile] = useState<File | null>(null);
@@ -23,14 +23,12 @@ export const AddMusicForm = () => {
     const [selectedInstruments, setSelectedInstruments] = useState<InstrumentProps[]>([]);
     const [selectedGenres, setSelectedGenres] = useState<GenreProps[]>([]);
 
-
-    useEffect (() => {
+    useEffect(() => {
         async function getInstruments() {
             try {
                 const res = await api.get("user/instrument");
                 setInstruments(res.data);
-
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         }
@@ -46,13 +44,10 @@ export const AddMusicForm = () => {
 
         void getGenres();
         void getInstruments();
-    },[])
+    }, [])
 
-
-    const options = instruments.map((instrument: InstrumentProps) => ({value: instrument.id, label: instrument.name}));
-
-    const optionsGenre = genres.map((genre: GenreProps) => ({value: genre.id, label: genre.name}));
-
+    const options = instruments.map((instrument: InstrumentProps) => ({ value: instrument.id, label: instrument.name }));
+    const optionsGenre = genres.map((genre: GenreProps) => ({ value: genre.id, label: genre.name }));
 
     const handleInstrumentSelect = (selectedOptions: any) => {
         const selectedInstruments = selectedOptions.map((option: any) => ({
@@ -63,11 +58,11 @@ export const AddMusicForm = () => {
     };
 
     const handleGenreSelect = (selectedOptions: any) => {
-        const selectedInstruments = selectedOptions.map((option: any) => ({
+        const selectedGenres = selectedOptions.map((option: any) => ({
             id: option.value,
             name: option.label,
         }));
-        setSelectedGenres(selectedInstruments);
+        setSelectedGenres(selectedGenres);
     };
 
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -80,15 +75,15 @@ export const AddMusicForm = () => {
 
     async function handleSubmitForm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        try{
-            if(!file){
+        try {
+            if (!file) {
                 return;
             }
             const formData: FormData = new FormData();
             formData.append("file", file);
             const res = await api.post(`user/audio/upload`, formData, {
-                headers:{
-                    "Content-Type" : "multipart/form-data"
+                headers: {
+                    "Content-Type": "multipart/form-data"
                 }
             })
             const musicData = {
@@ -99,47 +94,113 @@ export const AddMusicForm = () => {
                 instruments: selectedInstruments,
                 genres: selectedGenres
             }
-            const res2 = await api.post(`user/addmusic`,musicData )
+            const res2 = await api.post(`user/addmusic`, musicData)
             alert(res2.data);
-        }catch (error){
+        } catch (error) {
             console.error(error)
         }
     }
+
     return (
-        <form onSubmit={handleSubmitForm}>
-            <input
+        <FormContainer onSubmit={handleSubmitForm}>
+            <InputField
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="name"
+                placeholder="Name"
             />
 
-            <input
+            <FileInput
                 type="file"
                 onChange={handleFileChange}
             />
 
-            <input
+            <InputField
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="description"
+                placeholder="Description"
             />
 
-            <Select
+            <SelectStyled
                 options={options}
                 isMulti
                 onChange={handleInstrumentSelect}
-                placeholder="Wybierz instrumenty..."
+                placeholder="Select instruments..."
             />
 
-            <Select
+            <SelectStyled
                 options={optionsGenre}
                 isMulti
                 onChange={handleGenreSelect}
-                placeholder="Wybierz gatunek..."
+                placeholder="Select genres..."
             />
 
-            <button type="submit" > Zatwierdz </button>
-
-        </form>
+            <SubmitButton type="submit">Submit</SubmitButton>
+        </FormContainer>
     );
 }
+
+// Styled Components
+const FormContainer = styled.form`
+    background-color: #121212;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+`;
+
+const InputField = styled.input`
+    background-color: #282828;
+    border: 1px solid #333;
+    border-radius: 5px;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    &:focus {
+        border-color: #1db954;
+    }
+`;
+
+const FileInput = styled.input`
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    padding: 10px;
+`;
+
+const SelectStyled = styled(Select)`
+    .react-select__control {
+        background-color: #282828;
+        border: 1px solid #333;
+        border-radius: 5px;
+        color: #fff;
+    }
+    .react-select__menu {
+        background-color: #282828;
+    }
+    .react-select__option {
+        color: #fff;
+        &:hover {
+            background-color: #1db954;
+        }
+    }
+`;
+
+const SubmitButton = styled.button`
+    background-color: #1db954;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #1ed760;
+    }
+`;

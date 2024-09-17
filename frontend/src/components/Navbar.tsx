@@ -1,4 +1,6 @@
 import { useState } from "react";
+import styled from 'styled-components';
+import { FaBars } from 'react-icons/fa';  // Importing an icon for the hamburger menu
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -6,12 +8,10 @@ export const Navbar = () => {
     return (
         <NavContainer>
             <Nav>
-                <NavTitle href="/">
-                    MusicApp
-                </NavTitle>
-                <Menu className="menu" onClick={() => setMenuOpen(!menuOpen)}>
-
-                </Menu>
+                <NavTitle href="/">MusicApp</NavTitle>
+                <MenuIcon onClick={() => setMenuOpen(!menuOpen)}>
+                    <FaBars size={20} color="white" />
+                </MenuIcon>
                 <NavList className={menuOpen ? "open" : ""}>
                     <NavListItem>
                         <NavLink href="/music">Music</NavLink>
@@ -34,49 +34,57 @@ export const Navbar = () => {
     );
 };
 
-
-import styled from 'styled-components';
+// Styled Components
 
 const NavContainer = styled.div`
-    background-color: #212127;
-`
+    background-color: #121212; /* Spotify's dark theme */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Ensure navbar stays on top */
+    border-bottom: 1px solid #282828; /* Spotify-like subtle border */
+`;
+
 const Nav = styled.nav`
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
-    position: sticky;
-    top: 0;
     flex-direction: column;
     width: 90%;
     margin: 0 auto;
+    padding: 0.75rem 0;
 
-    @media (min-width: 481px) {
+    @media (min-width: 768px) {
         flex-direction: row;
-        align-items: center;
     }
 `;
 
 const NavTitle = styled.a`
-    font-size: 1.5rem;
-    margin: 1rem;
+    font-size: 1.75rem;
     font-weight: bold;
     text-decoration: none;
     color: white;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+
+    &:hover {
+        color: #1DB954; /* Spotify's signature green */
+    }
 `;
 
 const NavList = styled.ul`
-    display: flex;
+    display: ${props => (props.className === "open" ? "flex" : "none")};
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
 
-
-    @media (min-width: 481px) {
-        flex-direction: row;
+    @media (min-width: 768px) {
         display: flex;
-        margin-bottom: 0;
+        flex-direction: row;
         width: auto;
+        margin-bottom: 0;
     }
 `;
 
@@ -85,7 +93,7 @@ const NavListItem = styled.li`
     width: 100%;
     text-align: center;
 
-    @media (min-width: 481px) {
+    @media (min-width: 768px) {
         width: auto;
         text-align: left;
     }
@@ -95,30 +103,27 @@ const NavLink = styled.a`
     display: block;
     text-decoration: none;
     color: white;
-    padding: 0.5rem;
-    margin: 0.2rem 0.5rem;
-    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    margin: 0.5rem 0;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
 
     &:hover {
-        background-color: #172554;
+        background-color: #333333; /* Slight hover effect */
+        color: #1DB954; /* Spotify's green for hover */
     }
 
-    @media (min-width: 481px) {
+    @media (min-width: 768px) {
         margin: 0 0.5rem;
+        padding: 0.5rem 1rem;
     }
 `;
 
-const Menu = styled.div`
-  display: flex;
-  position: absolute;
-  top: 0.75rem;
-  right: 0.5rem;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 2.25rem;
-  height: 2rem;
+const MenuIcon = styled.div`
+    display: flex;
+    cursor: pointer;
 
-  @media (min-width: 481px) {
-    display: none;
-  }
+    @media (min-width: 768px) {
+        display: none; /* Hide the menu icon on larger screens */
+    }
 `;

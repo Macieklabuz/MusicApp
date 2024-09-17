@@ -49,8 +49,8 @@ function Home() {
             <h1>HOME</h1>
             <Columns>
                 <Column>
-                    <Button onClick={()=>(<Navigate to="chuj"/>)} label={"meow"}/>
-                    <Button onClick={()=>(<Navigate to="chuj"/>)} label={"meow"}/>
+                    <Button onClick={()=>(<Navigate to="music"/>)} label={"Music"}/>
+                    <Button onClick={()=>(<Navigate to="albums"/>)} label={"Albums"}/>
 
                 </Column>
                 <Column>

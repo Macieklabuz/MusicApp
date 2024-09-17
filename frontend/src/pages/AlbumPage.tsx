@@ -27,7 +27,6 @@ function AlbumPage() {
         music: MusicProps[];
     }
 
-    const [music, setMusic] = useState<MusicProps[]>([]);
     const [album, setAlbum] = useState<AlbumProps[]>([]);
     const [error, setError] = useState<string | null> (null)
     const [clickedMusic, setClickedMusic] = useState<MusicProps[] | null>();
