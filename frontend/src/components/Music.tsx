@@ -17,6 +17,7 @@ interface AlbumData {
 
 interface MusicProps {
     key: number;
+    id:number;
     file: string;
     name: string;
     likes: number;
@@ -25,9 +26,16 @@ interface MusicProps {
     onClick: any;
 }
 
-export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClick, likes }) => {
+export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClick, likes, id }) => {
     const [audioData, setAudioData] = useState<string>("");
 
+   async function onPlay(id: number){
+        try {
+            await api.post(`/user/addhistory`,  {id});
+        } catch (error) {
+            console.error("nie bangla historia :D", error);
+        }
+    }
     useEffect(() => {
         async function getAudio(file: string) {
             try {
@@ -65,7 +73,7 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
 
             <MusicControls>
                 {audioData && (
-                    <AudioPlayer controls>
+                    <AudioPlayer controls onPlay={()=>onPlay(id)}>
                         <source src={audioData} type="audio/mpeg" />
                         Your browser does not support the audio element.
                     </AudioPlayer>

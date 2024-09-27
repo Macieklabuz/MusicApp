@@ -1,5 +1,3 @@
-import { Navigate } from "react-router-dom";
-import {Button} from "../components/Button.tsx";
 import MainContent from "../components/MainContent.tsx";
 import api from "../utils/api.ts";
 import {useEffect, useState} from "react";
@@ -14,13 +12,19 @@ function Home() {
         name: string;
     }
 
-    interface MusicData{
+    interface MusicProps {
         id: number;
         file: string;
         name: string;
+        likes: number;
         artists: ArtistData[];
+        album: AlbumData | null;
+        onClick: any;
     }
-    const [music, setMusic] = useState<MusicData[]>([]);
+
+
+    const [music, setMusic] = useState<MusicProps[]>([]);
+    const [musicHistory, setMusicHistory] = useState<MusicProps[]>([]);
     const [error, setError] = useState<string | null> (null)
 
     useEffect(() => {
@@ -41,20 +45,35 @@ function Home() {
         }
     }
 
-    void getMusic()
+        async function getMusicHistory() {
 
-    });
+            try {
+                const res = await api.get('user/history')
+                if (res.data) {
+                    setMusicHistory(res.data)
+                } else {
+                    console.error("Music Not Found!")
+                }
+            } catch (err) {
+                setError("Failed to fetch data")
+                console.error(err)
+            }
+        }
+        void getMusicHistory()
+        void getMusic()
+
+    },[]);
     return (
         <MainContent>
             <h1>HOME</h1>
             <Columns>
                 <Column>
-                    <Button onClick={()=>(<Navigate to="music"/>)} label={"Music"}/>
-                    <Button onClick={()=>(<Navigate to="albums"/>)} label={"Albums"}/>
-
+                    {error}
+                    {Array.isArray(musicHistory) && musicHistory.map((music) => (
+                        <Music key={music.id} {...music}/>
+                    ))}
                 </Column>
                 <Column>
-                    {error}
                     {Array.isArray(music) && music.map((music) => (
                         <Music key={music.id} {...music}/>
                     ))}

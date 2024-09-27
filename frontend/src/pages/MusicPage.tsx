@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainContent from "../components/MainContent";
 import { Column, Columns } from "../styled-components/Common.tsx";
 import { SearchBar } from "../components/SearchBar.tsx";
 import api from "../utils/api.ts";
