@@ -18,9 +18,9 @@ public class LikeController {
     }
 
     @PostMapping("/user/like")
-    public ResponseEntity<?> like(@RequestParam Long userId, @RequestParam Long musicId) {
+    public ResponseEntity<?> like(@RequestParam Long musicId) {
         try{
-            likeService.likeMusic(userId, musicId);
+            likeService.likeMusic(musicId);
             return ResponseEntity.ok().build();
         } catch(IllegalArgumentException error) {
             return ResponseEntity.badRequest().body(error.getMessage());
@@ -32,9 +32,9 @@ public class LikeController {
     }
 
     @PostMapping("user/unlike")
-    public ResponseEntity<?> unlike(@RequestParam Long userId, @RequestParam Long musicId) {
+    public ResponseEntity<?> unlike(@RequestParam Long musicId) {
         try {
-            likeService.unlikeMusic(userId, musicId);
+            likeService.unlikeMusic(musicId);
             return ResponseEntity.ok().build();
         } catch(IllegalArgumentException error) {
             return ResponseEntity.badRequest().body(error.getMessage());

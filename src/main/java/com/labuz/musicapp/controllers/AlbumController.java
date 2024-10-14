@@ -1,5 +1,6 @@
 package com.labuz.musicapp.controllers;
 
+import com.labuz.musicapp.dtos.AlbumArtistDto;
 import com.labuz.musicapp.dtos.AlbumDto;
 import com.labuz.musicapp.services.AlbumService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,5 +19,11 @@ public class AlbumController {
     @GetMapping("/user/album")
     public List<AlbumDto> album(){
         return albumService.getAllAlbums();
+    }
+
+
+    @GetMapping("/user/album/artist")
+    public List<AlbumArtistDto> albumArtist(){
+        return albumService.getAllAlbumArtists();
     }
 }

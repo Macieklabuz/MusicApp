@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,4 +31,12 @@ public class AlbumEntity {
 
     @OneToMany(mappedBy = "album")
     private List<MusicEntity> music;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "album_artist",
+            joinColumns = { @JoinColumn(name = "album_id")},
+            inverseJoinColumns = {@JoinColumn(name = "artist_id")}
+    )
+    List<ArtistEntity> artists = new ArrayList<>();
 }

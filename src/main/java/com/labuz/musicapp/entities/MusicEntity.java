@@ -20,7 +20,7 @@ public class MusicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "music_id")
-    private int id;
+    private long id;
 
     @Column(name = "music_name")
     private String name;
@@ -59,4 +59,7 @@ public class MusicEntity {
     public int countLikes(){
         return likes.size();
     }
+
+    @ManyToMany(mappedBy = "musicHistory")
+    private List<UserEntity> usersHistory = new ArrayList<>();
 }

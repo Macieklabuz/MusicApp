@@ -6,7 +6,12 @@ import com.labuz.musicapp.entities.UserEntity;
 import com.labuz.musicapp.repositories.LikeRepository;
 import com.labuz.musicapp.repositories.MusicRepository;
 import com.labuz.musicapp.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -26,9 +31,8 @@ public class LikeService {
         this.musicRepository = musicRepository;
     }
 
-    public void likeMusic(Long userId, Long musicId) throws IllegalArgumentException, IllegalStateException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+    public void likeMusic(Long musicId) throws IllegalArgumentException, IllegalStateException {
+        UserEntity user = getUserEntity();
 
         MusicEntity music = musicRepository.findById(musicId)
                 .orElseThrow(() -> new IllegalArgumentException("Music Not Found"));
@@ -43,9 +47,8 @@ public class LikeService {
         likeRepository.save(like);
     }
 
-    public void unlikeMusic(Long userId, Long musicId) throws IllegalArgumentException, IllegalStateException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+    public void unlikeMusic(Long musicId) throws IllegalArgumentException, IllegalStateException {
+        UserEntity user = getUserEntity();
 
         MusicEntity music = musicRepository.findById(musicId)
                 .orElseThrow(() -> new IllegalArgumentException("Music Not Found"));
@@ -64,6 +67,17 @@ public class LikeService {
 
     }
 
+    private UserEntity getUserEntity() throws ResponseStatusException, IllegalArgumentException{
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Logged In");
+        }
+        String username= authentication.getName();;
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+
+        return user;
+    }
 
 }

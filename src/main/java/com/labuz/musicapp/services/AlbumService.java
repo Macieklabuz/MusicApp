@@ -1,5 +1,6 @@
 package com.labuz.musicapp.services;
 
+import com.labuz.musicapp.dtos.AlbumArtistDto;
 import com.labuz.musicapp.dtos.AlbumDto;
 import com.labuz.musicapp.dtos.ArtistDto;
 import com.labuz.musicapp.entities.AlbumEntity;
@@ -20,5 +21,10 @@ public class AlbumService {
     public List<AlbumDto> getAllAlbums() {
         List<AlbumEntity> albumEntities = albumRepository.findAll();
         return albumEntities.stream().map(AlbumDto::new).toList();
+    }
+
+    public List<AlbumArtistDto> getAllAlbumArtists() {
+        List<AlbumEntity> albumEntities = albumRepository.findAll();
+        return albumEntities.stream().map(AlbumArtistDto::new).toList();
     }
 }

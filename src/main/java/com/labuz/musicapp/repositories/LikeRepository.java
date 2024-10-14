@@ -1,5 +1,6 @@
 package com.labuz.musicapp.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.labuz.musicapp.entities.LikeEntity;
@@ -14,4 +15,5 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
     Optional<LikeEntity> findByUserAndMusic(UserEntity user, MusicEntity music);
 
     long countByMusic(MusicEntity music);
+    List<LikeEntity> findAllByUser(UserEntity user);
 }

@@ -37,4 +37,12 @@ public class UserEntity {
     )
     List<MusicEntity> music = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_music_history",
+            joinColumns = { @JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "music_id")}
+    )
+    List<MusicEntity> musicHistory = new ArrayList<>();
+
 }
