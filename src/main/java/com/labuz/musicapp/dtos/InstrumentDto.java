@@ -9,10 +9,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class InstrumentDto {
 
-    private final long id;
-    private final String name;
-    private final String type;
-    private final String description;
+    private  long id;
+    private String name;
+    private String type;
+    private String description;
 
     public InstrumentDto(InstrumentEntity instrument) {
         this.id = instrument.getInstrumentId();

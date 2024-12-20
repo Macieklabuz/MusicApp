@@ -39,4 +39,5 @@ public class AlbumEntity {
             inverseJoinColumns = {@JoinColumn(name = "artist_id")}
     )
     List<ArtistEntity> artists = new ArrayList<>();
+    
 }

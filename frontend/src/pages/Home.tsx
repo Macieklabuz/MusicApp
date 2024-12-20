@@ -5,11 +5,18 @@ import {Music} from "../components/Music.tsx"
 import {Column, Columns} from "../styled-components/Common.tsx";
 
 
+
 function Home() {
 
     interface ArtistData {
         id: number;
         name: string;
+    }
+
+    interface AlbumData {
+        id: number;
+        name: string;
+        image: string;
     }
 
     interface MusicProps {

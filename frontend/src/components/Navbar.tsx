@@ -17,16 +17,7 @@ export const Navbar = () => {
                         <NavLink href="/music">Music</NavLink>
                     </NavListItem>
                     <NavListItem>
-                        <NavLink href="/artists">Artists</NavLink>
-                    </NavListItem>
-                    <NavListItem>
                         <NavLink href="/albums">Albums</NavLink>
-                    </NavListItem>
-                    <NavListItem>
-                        <NavLink href="/genres">Genres</NavLink>
-                    </NavListItem>
-                    <NavListItem>
-                        <NavLink href="/instruments">Instruments</NavLink>
                     </NavListItem>
                 </NavList>
             </Nav>

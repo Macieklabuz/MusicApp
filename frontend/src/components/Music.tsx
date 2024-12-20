@@ -38,23 +38,39 @@ export const Music: React.FC<MusicProps> = ({ file, name, artists, album, onClic
     }
     useEffect(() => {
         async function getAudio(file: string) {
+            if (!file) {
+                console.error("File name is missing");
+                return;
+            }
+
             try {
-                const res = await api.get<Blob>(`/user/audio/file`, {
+                const res = await api.get<Blob>(`user/audio/file`, {
                     params: { fileName: file },
                     responseType: "blob",
+                    timeout: 60000
                 });
-                if (res.data) {
+
+                if (res.status === 200 && res.data) {
                     const blob = URL.createObjectURL(res.data);
                     setAudioData(blob);
                 } else {
-                    console.log("Unable to load audio file");
+                    console.error("Failed to fetch audio file: ", res.status, res.statusText);
                 }
-            } catch (error) {
-                console.error("Error fetching audio file", error);
+            } catch (error: any) {
+                if (error.response) {
+                    console.error("Server responded with an error", error.response.status, error.response.data);
+                } else if (error.request) {
+                    console.error("No response received from server", error.request);
+                } else {
+                    console.error("Error setting up the request", error.message);
+                }
             }
         }
 
         getAudio(file);
+        if(audioData){
+            URL.revokeObjectURL(audioData);
+        }
     }, [file]);
 
     return (

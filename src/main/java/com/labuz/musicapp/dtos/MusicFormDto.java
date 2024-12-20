@@ -13,13 +13,17 @@ import java.util.List;
 @Setter
 public class MusicFormDto {
 
-    private final long id;
-    private final String name;
-    private final String file;
-    private final String description;
+    private long id;
+    private String name;
+    private String file;
+    private String description;
 
-    private final List<InstrumentDto> instruments;
-    private final List<GenreDto> genres;
+    private List<InstrumentDto> instruments;
+    private List<GenreDto> genres;
+
+    public MusicFormDto() {
+
+    }
 
 }
 
